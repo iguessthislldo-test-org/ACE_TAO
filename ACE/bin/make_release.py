@@ -429,7 +429,7 @@ def get_comp_versions (component):
     comp_versions [component + "_code"] = \
         (comp_versions[major] << 16) + \
         (comp_versions[minor] << 8) + \
-        comp_versions[micro])
+        comp_versions[micro]
 
     old_comp_versions [component + "_version"] = make_version (old_comp_versions, '.')
     old_comp_versions [component + "_version_"] = make_version (old_comp_versions, '_')
