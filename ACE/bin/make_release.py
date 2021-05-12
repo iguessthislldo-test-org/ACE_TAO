@@ -60,8 +60,6 @@ class ReleaseType(enum.Enum):
     minor = enum.auto()
     micro = enum.auto()
 
-release_types = tuple(ReleaseType.__members__.values())
-
 def parse_args ():
     from argparse import ArgumentParser
     parser = ArgumentParser ()
@@ -470,7 +468,7 @@ def push_latest_branch (product, which, main_branch):
 
 
 def latest_branch_helper (fn, release_type):
-    release_types = tuple(ReleaseType.__members__.values())
+    release_types = tuple()
     do = release_types[release_types.index(release_type):]
     if ReleaseType.micro in do:
         fn ("ACE_TAO", "Beta", opts.ace_tao_branch)
