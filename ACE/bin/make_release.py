@@ -419,7 +419,7 @@ def get_comp_versions (component):
             comp_versions[micro] += 1
 
     def make_version (versions, joiner):
-        joiner.join ([versions[component + '_' + str(x)] for x in ReleaseType])
+        joiner.join ([versions[component + '_' + str(x)] for x in ReleaseType.__members__.keys()])
 
     comp_versions [component + "_version"] = make_version (comp_versions, '.')
     comp_versions [component + "_version_"] = make_version (comp_versions, '_')
