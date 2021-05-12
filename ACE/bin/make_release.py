@@ -470,7 +470,7 @@ def push_latest_branch (product, which, main_branch):
 
 
 def latest_branch_helper (fn, release_type):
-    release_types = tuple()
+    release_types = tuple(ReleaseType.__members__.values())
     do = release_types[release_types.index(release_type):]
     if ReleaseType.micro in do:
         fn ("ACE_TAO", "Beta", opts.ace_tao_branch)
