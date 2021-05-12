@@ -229,7 +229,7 @@ def update_version_files (component):
 #define {comp}_MICRO_VERSION {micro}
 #define {comp}_BETA_VERSION {micro}
 #define {comp}_VERSION \"{version}\"
-#define {comp}_VERSION_CODE {code:x}
+#define {comp}_VERSION_CODE 0x{code:x}
 #define {comp}_MAKE_VERSION_CODE(a,b,c) (((a) << 16) + ((b) << 8) + (c))
 """.format(**parts)
 
@@ -419,7 +419,9 @@ def get_comp_versions (component):
             comp_versions[micro] += 1
 
     def make_version (versions, joiner):
-        joiner.join ([str(versions[component + '_' + x]) for x in ReleaseType.__members__.keys()])
+        return joiner.join ([
+          str (versions[component + '_' + x]) for x in ReleaseType.__members__.keys ()
+        ])
 
     comp_versions [component + "_version"] = make_version (comp_versions, '.')
     comp_versions [component + "_version_"] = make_version (comp_versions, '_')
