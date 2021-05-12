@@ -133,7 +133,7 @@ def vprint (*args, take_action=False, **kwargs):
     act differently.
     """
 
-    take_action = take_action and not opts.take_action
+    take_action = take_action and opts.take_action
 
     if opts.verbose or take_action:
         print (*args, **kwargs)
