@@ -421,7 +421,7 @@ def get_comp_versions (component):
             comp_versions[micro] += 1
 
     def make_version (versions, joiner):
-        joiner.join ([versions[component + '_' + x] for x in release_types])
+        joiner.join ([versions[component + '_' + str(x)] for x in ReleaseType])
 
     comp_versions [component + "_version"] = make_version (comp_versions, '.')
     comp_versions [component + "_version_"] = make_version (comp_versions, '_')
@@ -470,6 +470,7 @@ def push_latest_branch (product, which, main_branch):
 
 
 def latest_branch_helper (fn, release_type):
+    release_types = tuple(ReleaseType.__members__.values())
     do = release_types[release_types.index(release_type):]
     if ReleaseType.micro in do:
         fn ("ACE_TAO", "Beta", opts.ace_tao_branch)
