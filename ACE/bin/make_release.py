@@ -51,8 +51,6 @@ bin_regex = re.compile ("\.(mak|mdp|ide|exe|ico|gz|zip|xls|sxd|gif|vcp|vcproj|vc
 version_restr = r'(\d+)(?:\.(\d+)(?:\.(\d+))?)?'
 version_re = re.compile(version_restr)
 
-default_branch = "ace6tao2"
-
 ##################################################
 #### Utility Methods
 ##################################################
@@ -89,13 +87,14 @@ def parse_args ():
     parser.add_argument ("--root", dest="repo_root",
         help="Specify an alternate repository root",
         default="https://github.com/DOCGroup/ACE_TAO.git")
-
-    parser.add_argument ("--branch",
-        help="Git branch to work off", default=default_branch)
+    parser.add_argument ("--ace-tao-branch",
+        help="ACE/TAO branch to update", default="ace6tao2")
 
     parser.add_argument ("--mpc_root",
         help="Specify an alternate MPC repository root",
         default="https://github.com/DOCGroup/MPC.git")
+    parser.add_argument ("--mpc-branch",
+        help="MPC branch to update", default="master")
 
     parser.add_argument ("-n", dest="take_action", action="store_false",
         help="Take no action", default=True)
@@ -460,17 +459,17 @@ def get_comp_versions (component):
     #                   str (comp_versions[minor])
 
 
-def update_latest_branch (product, which):
+def update_latest_branch (product, which, main_branch):
     """Update one of the Latest_* branches to point to the new release.
     """
 
     name = "Latest_" + which
 
-    vprint ('Fast-forwarding', name, 'to', opts.branch)
-    ex ("cd $DOC_ROOT/" + product + " && git fetch . " + opts.branch +  ":" + name)
+    vprint ('Fast-forwarding', name, 'to', main_branch)
+    ex ("cd $DOC_ROOT/" + product + " && git fetch . " + main_branch +  ":" + name)
 
 
-def push_latest_branch (product, which):
+def push_latest_branch (product, which, main_branch):
     """Update one of the remote Latest_* branches to point to the new release.
     """
 
@@ -486,15 +485,15 @@ def latest_branch_helper (fn, release_type):
     release_types = tuple(ReleaseType.__members__.values())
     do = release_types[release_types.index(release_type):]
     if ReleaseType.micro in do:
-        fn ("ACE_TAO", "Beta")
-        fn ("ACE_TAO", "Micro")
-        fn ("MPC", "ACETAO_Micro")
+        fn ("ACE_TAO", "Beta", opts.ace_tao_branch)
+        fn ("ACE_TAO", "Micro", opts.ace_tao_branch)
+        fn ("MPC", "ACETAO_Micro", opts.mpc_branch)
     if ReleaseType.minor in do:
-        fn ("ACE_TAO", "Minor")
-        fn ("MPC", "ACETAO_Minor")
+        fn ("ACE_TAO", "Minor", opts.ace_tao_branch)
+        fn ("MPC", "ACETAO_Minor", opts.mpc_branch)
     if ReleaseType.major in do:
-        fn ("ACE_TAO", "Major")
-        fn ("MPC", "ACETAO_Major")
+        fn ("ACE_TAO", "Major", opts.ace_tao_branch)
+        fn ("MPC", "ACETAO_Major", opts.mpc_branch)
 
 
 def tag ():
@@ -530,8 +529,8 @@ def push ():
 
     if opts.push:
         if opts.take_action:
-            vprint ("Pushing ACE_TAO", opts.branch, "to origin")
-            ex ("cd $DOC_ROOT/ACE_TAO && git push origin " + opts.branch)
+            vprint ("Pushing ACE_TAO", opts.ace_tao_branch, "to origin")
+            ex ("cd $DOC_ROOT/ACE_TAO && git push origin " + opts.ace_tao_branch)
 
             vprint ("Pushing tag %s on ACE_TAO" % (tagname))
             ex ("cd $DOC_ROOT/ACE_TAO && git push origin tag " + tagname)
